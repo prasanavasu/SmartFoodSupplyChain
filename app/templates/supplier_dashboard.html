@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/supplier_dashboard_styles.css') }}">
+<div class="row justify-content-md-center">
+    <div class="col col-lg-6">
+        <div class="dashboard-container">
+            <header>
+                <h1>Supplier Dashboard</h1>
+                <p id="location">Location: {{session.get('hub')}}</p>
+            </header>
+
+            <main>
+
+                <!--            <h3>In Stock Products</h3>-->
+                <table id="in-stock-product-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in products %}
+                        {% if i.location == session.get('hub') %}
+                        <tr>
+                            <td>{{i.name}}</td>
+                            <td>{{i.quantity}}</td>
+                            {% if not stocks(i.quantity,i.name) %}
+                            <td class="text-danger">Out of stocks</td>
+                            {% else %}
+                            <td>In stocks</td>
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </main>
+        </div>
+    </div>
+    <div class="col col-lg-3" style="max-width: 100%">
+        <div class="row card p-4 my-4">
+            <div class="form-group my-5 col-lg">
+                <form id="request-form">
+                    <label for="product-select">Select Product:</label>
+                    <select id="product-select" class="form-control" name="product">
+                        {% for i in products %}
+                        {% if i.location == session.get('hub') %}
+                        {% if not stocks(i.quantity,i.name) %}
+                        <option value="{{i.name}}">{{(i.name).capitalize()}}</option>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <label for="hub-select">Select Hub:</label>
+                    <select id="hub-select" class="form-control mb-3" name="hub">
+                        <!-- Options for hubs ... -->
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-success">Send Request</button>
+                </form>
+            </div>
+            <div class="col-lg">
+                <table id="in-stock-product-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Requested Hub</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

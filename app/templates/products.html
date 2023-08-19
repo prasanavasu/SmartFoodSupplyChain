@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+<div class="container">
+    <header>
+        <h1>Create Products</h1>
+    </header>
+    <main>
+        <form method="post" action="/add/product">
+            <label for="username">Name:</label>
+            <input type="text" id="username" name="name" placeholder="Name" required>
+
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" placeholder="Enter your Description" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="text" id="quantity" name="quantity" placeholder="Enter your Quantity" required>
+
+            <label for="unit_price">Unit Price:</label>
+            <input type="text" id="unit_price" name="unit_price" placeholder="Enter your Unit price" required>
+
+            <label for="location">Unit Price:</label>
+            <input type="text" id="location" name="location" placeholder="Enter your Location" required>
+
+            <label for="category">Category:</label>
+            <select name="category" id="category" class="form-control">
+                {% for i in category %}
+                <option value="{{i.name}}">{{(i.name).capitalize()}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <div class="button-container">
+                <button type="Submit">Add Product</button>
+            </div>
+        </form>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

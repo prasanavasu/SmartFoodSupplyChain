@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-styles.css') }}">
+<div class="row justify-content-md-center">
+    <div class="col col-lg-6">
+        <div class="dashboard-container">
+            <header>
+                <h1>Customer Dashboard</h1>
+                <p id="location">Location: {{session.get('hub')}}</p>
+            </header>
+    
+    
+            <main>
+                <div id="welcome-message"></div> <!-- Add this div to display the welcome message -->
+                <h2>Product List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-table">
+                        {% for i in products %}
+                        <tr>
+                            <td>{{i.name}}</td>
+                            <td>{{i.quantity}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+
+        </div>
+    </div>
+  </div>
+   
+    <!-- Add this div for the chatbot UI -->
+    <div id="chatbot" class="chatbot">
+        <div id="chatbot-icon" class="chatbot-icon" onclick="toggleChatbot()">
+            <img src="{{ url_for('static', filename='css/chatbot-icon.png') }}" alt="Chatbot Icon">
+        </div>
+        <div id="chatbot-interface" class="chatbot-interface">
+            <button onclick="showVisualization('button1')">Button 1</button>
+            <button onclick="showVisualization('button2')">Button 2</button>
+            <button onclick="showVisualization('button3')">Button 3</button>
+
+        </div>
+    </div>
+
+    <!-- Add this div for the chatbot UI -->
+   <div id="visualization-container"></div>
+
+    {% endblock %}
+
