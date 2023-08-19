@@ -26,6 +26,7 @@ cursor.execute('''
         Unit_Price INTEGER,
         CreatedDate DATE,
         ModifiedDate DATE,
+        Quantity INT,
         FOREIGN KEY (Category_Id) REFERENCES Category (Id)
     )
 ''')
