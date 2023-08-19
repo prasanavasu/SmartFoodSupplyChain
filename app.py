@@ -132,6 +132,16 @@ def distributor_dashboard():
     return render_template('distributor_dashboard.html')
 
 
+@app.route('/incoming_requests')
+def incoming_requests():
+    return render_template('incoming_requests.html')
+
+
+@app.route('/outgoing_requests')
+def outgoing_requests():
+    return render_template('outgoing_requests.html')
+
+
 @app.route('/api/login', methods=['POST'])
 @cross_origin()
 @crossdomain(origin='*')
@@ -174,7 +184,7 @@ def get_product_availability(product_id):
         return jsonify({'error': 'Product not found'}), 404
 
 
-@app.route('/api/products/', methods=['GET'])
+
 def get_products():
     connection = sqlite3.connect('inventory.db')
     cursor = connection.cursor()
@@ -189,10 +199,18 @@ def get_products():
     if products:
         username = 'suhil'
         # Convert the products list to a dictionary format
-        product_data = [{'product_name': product[1], 'quantity': product[4]} for product in products]
-        return jsonify({'username': username, 'products': product_data})
+        product_data = [{'product_name': product[1], 'quantity': product[7]} for product in products]
+        return product_data , username
     else:
-        return jsonify({'error': 'Product not found'}), 404
+        return False
+
+@app.route('/api/products/', methods=['GET'])
+def get_product_items():
+    products = get_products()
+    if products:
+        return jsonify({'username': products[1], 'products': products[0]})
+    return jsonify({'error': 'Product not found'}), 404
+
 
 
 @app.route('/api/checkproductstock', methods=['GET'])
@@ -285,7 +303,6 @@ def send_request():
     return jsonify({'message': 'Request sent successfully'})
 
 
-
 @app.route('/api/visualizations/<visualization_id>', methods=['GET'])
 def getTopSellingStock(visualization_id):
     # Top Selling Stock
@@ -343,6 +360,50 @@ def getTopSellingStock(visualization_id):
 
     else:
         return jsonify({'error': 'Visualization not found'}), 404
+
+
+# Sample data for products and hubs
+products_data = [
+    {"product_name": "Product A", "quantity": 10, "status": "In Stock", "hub": "Hub A"},
+    {"product_name": "Product A", "quantity": 0, "status": "Out of Stock", "hub": "Hub B"},
+    {"product_name": "Product B", "quantity": 5, "status": "In Stock", "hub": "Hub A"},
+    {"product_name": "Product B", "quantity": 8, "status": "In Stock", "hub": "Hub B"},
+    # ... add more product data here
+]
+
+
+@app.route('/api/find_top_hubs_for_out_of_stock_product', methods=['POST'])
+def find_top_hubs_for_out_of_stock_product():
+    data = request.json
+
+    product_name = data.get('product_name')
+    hubs_with_same_product = {}
+
+    for entry in products_data:
+        if entry['product_name'] == product_name and entry['status'] == 'In Stock':
+            if entry['hub'] in hubs_with_same_product:
+                hubs_with_same_product[entry['hub']] += entry['quantity']
+            else:
+                hubs_with_same_product[entry['hub']] = entry['quantity']
+
+    sorted_hubs = sorted(hubs_with_same_product.items(), key=lambda x: x[1], reverse=True)[:3]
+
+    result = [{"hub": hub, "total_quantity": quantity} for hub, quantity in sorted_hubs]
+
+    return jsonify({"top_hubs": result})
+
+
+# Sample data for incoming and outgoing requests
+requests_data = [
+    {"type": "Incoming", "product": "Product A", "hub": "Hub A"},
+    {"type": "Outgoing", "product": "Product B", "hub": "Hub B"},
+    # ... add more request data here
+]
+
+
+@app.route('/api/requests', methods=['GET'])
+def get_requests():
+    return jsonify({"requests": requests_data})
 
 
 if __name__ == '__main__':
