@@ -1,0 +1,201 @@
+/* Global Styles for Dashboard Pages */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('Customer_background_3.avif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    max-width: 1000px; /* Increase the max-width */
+    padding: 40px;
+    margin: 20px; /* Add margin for spacing */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#username {
+    font-weight: bold;
+}
+
+#location {
+    color: #666;
+}
+
+main {
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+tfoot td {
+    font-weight: bold;
+    text-align: right;
+}
+
+.logout {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout:hover {
+    background-color: #2980b9;
+}
+
+/* Add this to your dashboard-styles.css or a new CSS file */
+.chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.chatbot-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.chatbot-interface {
+  position: absolute;
+  bottom: 100px;
+  right: 30px;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  display: none;
+}
+
+/* Add this to your chatbot-styles.css */
+.chat-message {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #ffdc6e; /* Bright yellow */
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #333;
+}
+
+.chat-message:nth-child(odd) {
+  background-color: #e5f4ff;
+}
+
+/* Visualization Buttons Styling */
+.visualization-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Style for the visualization buttons */
+.visualization-button {
+    display: block;
+    background-color: #ff8a65; /* Bright orange */
+    color: #fff; /* Text color */
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 20px; /* Rounded corners */
+    margin: 10px auto; /* Center horizontally and add some vertical spacing */
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Add transition effects */
+}
+
+.visualization-button:hover {
+    background-color: #E0A000; /* Darker background color on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover */
+}
+
+.visualization-options-button {
+    display: block;
+    background-color: #FAD02E;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 10px auto;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.visualization-options-button:hover {
+    background-color: #E0A000;
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.visualization-options {
+    text-align: center;
+}
+
+
+/* Visualization Container
+.visualization-container {
+    margin-top: 10px;
+    text-align: center;
+}* ---- previously /
+
+
+/* Visualization Container */
+.visualization-container {
+  padding: 10px;
+  text-align: center;
+}
+
+.visualization-image {
+  max-width: 100%;
+  height: auto;
+}
+
