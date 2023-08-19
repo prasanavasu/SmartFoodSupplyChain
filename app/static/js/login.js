@@ -2,16 +2,16 @@
 const apiBaseUrl = 'http://127.0.0.1:5000';
 
 async function login() {
-    const username = document.getElementById('username').value;
+    const phone = document.getElementById('phone').value;
     const password = document.getElementById('password').value;
 
     const data = {
-        username: username,
+        phone: phone,
         password: password
     };
 
     console.log('Sending API request...');
-    const response = await fetch(`${apiBaseUrl}/api/login`, {
+    const response = await fetch(`/api/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -24,13 +24,13 @@ async function login() {
 
     if (response.ok) {
         if (result.user_type === 'customer') {
-            window.location.href = '/customer_dashboard';
+            window.location.href = '/customer';
         }
          if (result.user_type === 'supplier') {
-            window.location.href = '/supplier_dashboard';
+            window.location.href = '/supplier';
         }
         if (result.user_type === 'distributor') {
-            window.location.href = '/distributor_dashboard';
+            window.location.href = '/distributor';
         }else {
             // Handle other user types or show an error message
         }
