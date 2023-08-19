@@ -42,11 +42,12 @@
         </div>
     </div>
     <div class="col col-lg-3" style="max-width: 100%">
-        <div class="row card p-4 my-4">
+        <div class="row card p-3 my-4">
             <div class="form-group my-5 col-lg">
-                <form id="request-form">
+                <form method="post" action="/request">
                     <label for="product-select">Select Product:</label>
-                    <select id="product-select" class="form-control" name="product">
+                    <select id="product_select" class="form-control" name="product" onchange="hub_change()">
+                        <option value="">Select</option>
                         {% for i in products %}
                         {% if i.location == session.get('hub') %}
                         {% if not stocks(i.quantity,i.name) %}
@@ -55,10 +56,11 @@
                         {% endif %}
                         {% endfor %}
                     </select>
-                    <label for="hub-select">Select Hub:</label>
-                    <select id="hub-select" class="form-control mb-3" name="hub">
-                        <!-- Options for hubs ... -->
+                    <label for="hub_select">Select Hub:</label>
+                    <select id="hub_select" class="form-control mb-3" name="hub">
+                       
                     </select>
+                    <input name="dest" value="{{session.get('hub')}}" hidden>
                     <button type="submit" class="btn btn-sm btn-success">Send Request</button>
                 </form>
             </div>
@@ -66,14 +68,44 @@
                 <table id="in-stock-product-table">
                     <thead>
                         <tr>
+                            <th>S.NO</th>
                             <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Requested Hub</th>
-                            <th>Action</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                            <th>Distributor Name</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        {% for i in request_data %}
+                        {% if (i.source_location==session.get('hub')) or (session.get('hub')==i.designation_location) %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            
+                            <td>{{get_stocks(i.stock_Id).name if get_stocks(i.stock_Id) else '-'}}</td>
+                            <td>{{i.source_location}}</td>
+                            <td>{{i.designation_location}}</td>
+                            <td>
+                                {% if (i.status == '0') and (session.get('hub')==i.designation_location) %}
+                                <a class="btn btn-sm btn-secondary">Requested</a>
+                                {% elif  (i.status == '0') and (session.get('hub')!=i.designation_location) %}
+                                <a class="btn btn-sm " style="background-color: rgb(226, 137, 43); color: white;" href="/approval/{{i.id}}">Accept</a>
+                                {% elif  (i.status == '1')%}
+                                <a class="btn btn-sm btn-info" >Accepted</a>
+                                {% elif  (i.status == '2')%}
+                                <a class="btn btn-sm" style="background-color: blueviolet; color: white;" href="/complete/{{i.id}}" >Accepted delivery</a>
+                               {% elif  (i.status == '3')%}
+                                <a class="btn btn-sm btn-success"  >completed</a>
+                                {% endif %}
+                            </td>
+                            {% if (i.status == '2') or (i.status == '3') %}
+                            <td>{{get_users(i.distributer).name if get_users(i.distributer) else '-'}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -81,5 +113,11 @@
     </div>
 
 </div>
-
+<script src="{{ url_for('static', filename='js/supplier_dashboard.js') }}"></script>
+{% if message %}
+<script>
+    alert('{{message}}');
+    window.location.href = '/supplier';
+</script>
+{% endif %}
 {% endblock %}

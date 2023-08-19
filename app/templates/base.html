@@ -24,14 +24,15 @@
               <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item {{customer}}" id="customer">
-              <a class="nav-link" href="/customer" class="dashboard-button">Customer</a>
+              <a class="nav-link" href="/{{session.get('role')}}" class="dashboard-button">Dashboard</a>
             </li>
+            <!-- 
             <li class="nav-item {{supplier}}" id="supplier">
               <a class="nav-link" href="/supplier" class="dashboard-button">Supplier</a>
             </li>
             <li class="nav-item {{distributor}}" id="distributor">
                 <a class="nav-link" href="/distributor" class="dashboard-button">Distributor</a>
-              </li>
+              </li> -->
           </ul>
           {% if session.get('name') %}
           <a class="ml-auto" href="{{ url_for('logout') }}" class="dashboard-button"><i class="fa fa-sign-out" aria-hidden="true"></i>{{session['name']}}</a>

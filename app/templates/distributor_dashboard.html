@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-styles.css') }}">
+<div class="row justify-content-md-center">
+    <div class="col col-lg-6">
+        <div class="dashboard-container">
+            <header>
+                <h1>Distributor Dashboard</h1>
+                <p id="location">Location: {{session.get('hub')}}</p>
+            </header>
+    
+    
+            <main>
+                <div id="welcome-message"></div> <!-- Add this div to display the welcome message -->
+                <h2>Requested List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.NO</th>
+                            <th>Product</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-table">
+                        {% for i in request_data %}
+                        {% if (i.source_location==session.get('hub')) or (session.get('hub')==i.designation_location) and (i.status != '0')%}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            
+                            <td>{{get_stocks(i.stock_Id).name if get_stocks(i.stock_Id) else '-'}}</td>
+                            <td>{{i.source_location}}</td>
+                            <td>{{i.designation_location}}</td>
+                            <td>
+                                {% if  (i.status == '1') %}
+                                <a class="btn btn-sm btn-secondary" href="/deliver/{{i.id}}">Accept delivery</a>
+                                {% elif  (i.status == '2')%}
+                                <a class="btn btn-sm" style="background-color: blueviolet; color: white;" >Accepted delivery</a>
+                               {% elif  (i.status == '3')%}
+                                <a class="btn btn-sm btn-success"  >completed</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+
+        </div>
+    </div>
+  </div>
+  {% if message %}
+  <script>
+      alert('{{message}}');
+      window.location.href = '/distributor';
+  </script>
+  {% endif %}
+
+    {% endblock %}
+

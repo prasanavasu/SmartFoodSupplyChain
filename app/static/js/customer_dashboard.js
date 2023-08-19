@@ -1,5 +1,4 @@
 // Update the API URL to use the correct port
-const apiBaseUrl = 'http://127.0.0.1:5000';
 
 document.addEventListener('DOMContentLoaded', function() {
     const usernameElement = document.getElementById('username');
@@ -9,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const visualizationContainer = document.getElementById('visualization-container'); // Add this line
 
     // Fetch and populate product data from API
-    fetch(`${apiBaseUrl}/api/products`)
+    fetch(`/api/products`)
         .then(response => response.json())
         .then(data => {
 //            usernameElement.textContent = `Welcome, ${data.username}!`;
@@ -69,7 +68,7 @@ function showVisualization(buttonId) {
     }
 
     // Fetch the visualization data
-    fetch(`${apiBaseUrl}/api/visualizations/${buttonId}`)
+    fetch(`/api/visualizations/${buttonId}`)
         .then(response => response.json())
         .then(data => {
             const chatbotInterface = document.getElementById('chatbot-interface');

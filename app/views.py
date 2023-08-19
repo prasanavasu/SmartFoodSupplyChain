@@ -101,7 +101,10 @@ def apple_touch_icon():
 
 @app.route('/')
 def index():
-    return render_template('index.html',title='Smart Food Supply Chain Management System',home='active')
+    login = True
+    if session.get('name'):
+        login=False
+    return render_template('index.html',title='Smart Food Supply Chain Management System',home='active',login=login)
 
 @app.route('/add/role')
 def role():
@@ -197,31 +200,119 @@ def check_products_stock(pk,value):
         product_status = False
     return product_status
 
+@app.route('/find_hub/<data>')
+def find_top_hub(data):
+    stocks = Stock.query.filter_by(name=data).all()
+    hubs = [i.location for i in stocks if check_products_stock(int(i.quantity),i.name)]
+    return jsonify({'hubs': hubs})
+
+
+def get_stocks(pk):
+    data = Stock.query.filter_by(id=pk).first()
+    return data if data else ''
+
+def get_users(pk):
+    data = Users.query.filter_by(id=pk).first()
+    return data if data else ''
+  
+
 @app.route('/<pk>')
 def customer_login(pk=None):
 
     if pk == 'customer' :
 
-        html_template = 'customer_dashboard.html' if (session.get('role') == 'customer') else 'customer_login.html'
-        title = 'Customer Dashboard' if (session.get('role') == 'distributor') else 'Customer Login'
+        html_template = 'customer_dashboard.html' if (session.get('role') == 'customer') else 'index.html'
+        title = 'Customer Dashboard' if (session.get('role') == 'distributor') else 'Login'
         products = Stock.query.all()
         return render_template(html_template,title=title,customer='active',products=products)
 
     elif pk == 'supplier':
         products = Stock.query.all()
-        html_template = 'supplier_dashboard.html' if (session.get('role') == 'supplier') else 'supplier_login.html'
-        title = 'Supplier Dashboard' if (session.get('role') == 'supplier') else 'Supplier Login'
-        return render_template(html_template,title=title,supplier='active',products=products,stocks=check_products_stock)
+        request_data = Request.query.all()
+        html_template = 'supplier_dashboard.html' if (session.get('role') == 'supplier') else 'index.html'
+        title = 'Supplier Dashboard' if (session.get('role') == 'supplier') else 'Login'
+        return render_template(html_template,get_stocks=get_stocks,title=title,supplier='active',get_users=get_users,products=products,stocks=check_products_stock,request_data=request_data)
 
-    if pk == 'distributor':
-        html_template = 'distributor_dashboard.html' if (session.get('role') == 'distributor') else 'distributor_login.html'
-        title = 'Distributor Dashboard' if (session.get('role') == 'distributor') else 'Distributor Login'
-        return render_template(html_template,title=title,distributor='active')
+    elif pk == 'distributor':
+        products = Stock.query.all()
+        request_data = Request.query.all()
+        html_template = 'distributor_dashboard.html' if (session.get('role') == 'distributor') else 'index.html'
+        title = 'Distributor Dashboard' if (session.get('role') == 'distributor') else 'Login'
+        return render_template(html_template,title=title,distributor='active',get_stocks=get_stocks,products=products,request_data=request_data)
+    elif pk=='login':
+        return redirect('/')
 
     else:
         return redirect('/')
     
+@app.route('/approval/<pk>')
+def approval_request(pk):
+    message = 'Invalid Id'
+    products = Stock.query.all()
+    request_data = Request.query.all()
+    if req:=Request.query.filter_by(id=pk).first():
+        req.status = '1'
+        db.session.commit()
+        message = 'Request Accepted'
+    return render_template('supplier_dashboard.html',get_stocks=get_stocks,get_users=get_users,request_data=request_data,message=message,title='Supplier Dashboard',supplier='active',products=products,stocks=check_products_stock)
 
+
+@app.route('/complete/<pk>')
+def complete_request(pk):
+    priority_of_product = {
+        'Rice': 2000,
+        'Lentils': 1000,
+        'Sugar': 2000,
+        'Oil': 500,
+        'Milk': 500,
+        'Tomatoes': 800,
+        'Onions': 800,
+        'Whole Grains': 1000,
+        'Soy': 1000,
+        'Bread': 500
+    }
+    message = 'Invalid Id'
+    products = Stock.query.all()
+    request_data = Request.query.all()
+    if req:=Request.query.filter_by(id=pk).first():
+        req.status = '3'
+        message = 'Accepted Completed'
+        db.session.commit()
+    return render_template('supplier_dashboard.html',get_stocks=get_stocks,get_users=get_users,request_data=request_data,message=message,title='Supplier Dashboard',supplier='active',products=products,stocks=check_products_stock)
+
+
+@app.route('/deliver/<pk>')
+def accept_delivery(pk):
+    message = 'Invalid Id'
+    products = Stock.query.all()
+    request_data = Request.query.all()
+    if req:=Request.query.filter_by(id=pk).first():
+        user_pk = session.get('id')
+        user = Users.query.filter_by(id=user_pk).first()
+        req.status = '2'
+        req.distributer = user.id if user else None
+        db.session.commit()
+        message = 'delivery Accepted'
+    return render_template('distributor_dashboard.html',message=message,title='Distributor Dashboard',distributor='active',get_stocks=get_stocks,products=products,request_data=request_data)
+
+@app.route('/request', methods=['POST'])
+def supply_request(): 
+    product = request.form.get('product')
+    hub = request.form.get('hub')
+    dest = request.form.get('dest')
+    message = 'Invalid data'
+    products = Stock.query.all()
+    request_data = Request.query.all()
+    if stock:=Stock.query.filter_by(name=product,location=hub).first():
+        message = "Already Requested"
+        data_request = Request.query.filter_by(source_location=hub,designation_location=dest,stock_Id=stock.id).first()
+        if (data_request and (data_request.status not in ['0','1','2']) or (not data_request)):
+            request_ = Request(source_location=hub,designation_location=dest,stock_Id=stock.id,status='0')
+            db.session.add(request_)
+            db.session.commit()
+           
+            message = 'Product Requested'
+    return render_template('supplier_dashboard.html',get_stocks=get_stocks,get_users=get_users,request_data=request_data,message=message,title='Supplier Dashboard',supplier='active',products=products,stocks=check_products_stock)
 
 @app.route('/logout')
 def logout():
@@ -245,6 +336,7 @@ def login():
             # storing for later access
             session['name'] = user.name
             session['hub'] = user.location
+            session['id'] = user.id
             
             # Close the cursor and commit changes
             role = Roles.query.filter_by(id=user.role).first()

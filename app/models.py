@@ -48,3 +48,18 @@ class Orders(db.Model):
     quantity = Column(String(50))
     order_date = Column(DateTime())
     status = Column(String(100))
+
+
+class Request(db.Model):
+    id = Column(Integer, primary_key=True)
+    stock_Id =  Column(String(100), ForeignKey('stock.id'))
+    distributer =  Column(String(100), ForeignKey('users.id'))
+    source_location = Column(String(50))
+    designation_location = Column(String(50))
+    status = Column(String(100))
+    '''
+    0 - requested
+    1 - accepted
+    2 - delivery
+    3 - completed
+    '''

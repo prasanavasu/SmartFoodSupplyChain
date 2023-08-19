@@ -1,9 +1,32 @@
 {% extends "base.html" %}
-<body>
-    
-    {% block content %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
+<body>
+
+    {% block content %}
+    {% if not login %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% else %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+    <div class="container">
+        <header>
+            <h1> Login</h1>
+        </header>
+        <main>
+            <form id="login-form">
+                <label for="phone">Mobile Number:</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your Mobile Number" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <div class="button-container">
+                    <button type="button" onclick="login()">Sign In</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    {% endif %}
     {% endblock %}
 </body>
-

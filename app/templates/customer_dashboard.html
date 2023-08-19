@@ -22,10 +22,12 @@
                     </thead>
                     <tbody id="product-table">
                         {% for i in products %}
+                        {% if i.location == session.get('hub') %}
                         <tr>
                             <td>{{i.name}}</td>
                             <td>{{i.quantity}}</td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -50,6 +52,6 @@
 
     <!-- Add this div for the chatbot UI -->
    <div id="visualization-container"></div>
-
+   <script src="{{ url_for('static', filename='js/customer_dashboard.js') }}"></script>
     {% endblock %}
 
