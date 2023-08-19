@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/supplier_dashboard_styles.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Supplier Dashboard</h1>
+            <p id="location">Location: Adyar, Chennai</p>
+        </header>
+
+        <main>
+
+<!--            <h3>In Stock Products</h3>-->
+            <table id="in-stock-product-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Add your content here -->
+                </tbody>
+            </table>
+
+<!--            <h3>Out of Stock Products</h3>-->
+            <table id="out-of-stock-product-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Add your content here -->
+                </tbody>
+            </table>
+            <form id="request-form">
+            <label for="product-select">Select Product:</label>
+            <select id="product-select" name="product">
+                <!-- Options will be dynamically populated by JavaScript -->
+            </select>
+            <label for="hub-select">Select Hub:</label>
+            <select id="hub-select" name="hub">
+                <!-- Options for hubs ... -->
+            </select>
+            <button type="submit">Send Request</button>
+        </form>
+        </main>
+
+        <footer>
+            <a href="/supplier_login" class="logout">Log Out</a>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/supplier_dashboard.js') }}"></script>
+</body>
+</html>

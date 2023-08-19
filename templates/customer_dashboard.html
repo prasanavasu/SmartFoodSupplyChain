@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-styles.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Customer Dashboard</h1>
+            <p id="location">Location: Adyar, Chennai</p>
+        </header>
+
+
+        <main>
+            <div id="welcome-message"></div> <!-- Add this div to display the welcome message -->
+            <h2>Product List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table">
+                    <!-- Table content will be populated dynamically -->
+                </tbody>
+            </table>
+        </main>
+        <footer>
+            <a href="/customer_login" class="logout">Log Out</a>
+        </footer>
+    </div>
+    <!-- Add this div for the chatbot UI -->
+    <div id="chatbot" class="chatbot">
+        <div id="chatbot-icon" class="chatbot-icon" onclick="toggleChatbot()">
+            <img src="{{ url_for('static', filename='css/chatbot-icon.png') }}" alt="Chatbot Icon">
+        </div>
+        <div id="chatbot-interface" class="chatbot-interface">
+            <button onclick="showVisualization('button1')">Button 1</button>
+            <button onclick="showVisualization('button2')">Button 2</button>
+            <button onclick="showVisualization('button3')">Button 3</button>
+
+        </div>
+    </div>
+
+    <!-- Add this div for the chatbot UI -->
+   <div id="visualization-container"></div>
+
+
+    <script src="{{ url_for('static', filename='js/customer_dashboard.js') }}"></script>
+</body>
+</html>
