@@ -35,7 +35,6 @@ function toggleChatbot() {
 // Function to show visualization
 
 function showVisualization(buttonId) {
-    console.log(`Button ${buttonId} clicked`);
 
     // Disable only the clicked button
     const clickedButton = document.getElementById(`visualization-button-${buttonId}`);
@@ -58,11 +57,12 @@ function showVisualization(buttonId) {
             <img src="${data.imageUrl}" alt="Visualization" class="visualization-image"id="${data.id}_img"></a>
             <p>${data.name}</p>`;
             if(data.id==='#getTopSellingStock'){
-                visualizationDiv.innerHTML = html_data+ ` <button class="visualization-button"id="busiestHour" onclick="showVisualization('busiestHour')">Busiest Hour</button>`
+                visualizationDiv.innerHTML = html_data+ ` <button class="visualization-button" id="busiestHour" onclick="showVisualization('busiestHour')">Busiest Hour</button>`
 
             }else{
                 visualizationDiv.innerHTML = html_data
             }
+            
 
             // Append the visualization div to the chatbot interface
             chatbotInterface.appendChild(visualizationDiv);

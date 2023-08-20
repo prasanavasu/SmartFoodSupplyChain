@@ -18,6 +18,7 @@ from numpy.compat import basestring
 from app import app,db
 from app.models import *
 from datetime import datetime
+from app.food_contaminant_model import food_contaminant
 
 
 # Simulated inventory data (you would use a database in reality)
@@ -93,6 +94,9 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600,
 
     return decorator
 
+@app.route('/containment/<food>/<species>/<geno_type>/<month>/<state>/<ingred>')
+def containment(food,species,geno_type,month,state,ingred):
+    return food_contaminant(food,species,geno_type,month,state,ingred)
 
 @app.route('/apple-touch-icon-precomposed.png')
 def apple_touch_icon():
