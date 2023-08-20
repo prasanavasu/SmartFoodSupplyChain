@@ -7,29 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatbotInterface = document.getElementById('chatbot-interface'); // Update this line
     const visualizationContainer = document.getElementById('visualization-container'); // Add this line
 
-    // Fetch and populate product data from API
-    fetch(`/api/products`)
-        .then(response => response.json())
-        .then(data => {
-//            usernameElement.textContent = `Welcome, ${data.username}!`;
-
-            // Clear existing table rows
-            productTable.innerHTML = '';
-
-            // Populate the table with data
-            data.products.forEach(product => {
-                const row = document.createElement('tr');
-                const productCell = document.createElement('td');
-                const quantityCell = document.createElement('td');
-
-                productCell.textContent = product.product_name;
-                quantityCell.textContent = product.quantity;
-
-                row.appendChild(productCell);
-                row.appendChild(quantityCell);
-                productTable.appendChild(row);
-            });
-        });
 
     // Static chatbot messages
     chatbotInterface.innerHTML = `
@@ -42,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const visualizationButtons = document.createElement('div');
     visualizationButtons.classList.add('visualization-buttons');
     visualizationButtons.innerHTML = `
-        <button class="visualization-button" onclick="showVisualization('getTopSellingStock')">Top Selling Stock</button>
-        <button class="visualization-button" onclick="showVisualization('busiestHour')">Busiest Hour</button>
+        <button class="visualization-button" id="selling_stock" onclick="showVisualization('getTopSellingStock')">Top Selling Stock</button>
+        <button class="visualization-button"id="busiest_hour" onclick="showVisualization('busiestHour')">Busiest Hour</button>
     `;
     chatbotInterface.appendChild(visualizationButtons);
 
