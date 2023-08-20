@@ -222,7 +222,7 @@ def customer_login(pk=None):
     if pk == 'customer' :
 
         html_template = 'customer_dashboard.html' if (session.get('role') == 'customer') else 'index.html'
-        title = 'Customer Dashboard' if (session.get('role') == 'distributor') else 'Login'
+        title = 'Customer Dashboard' if (session.get('role') == 'customer') else 'Login'
         products = Stock.query.all()
         return render_template(html_template,title=title,customer='active',products=products)
 
@@ -436,7 +436,7 @@ def getTopSellingStock(visualization_id):
         # return send_file(img_buffer, mimetype='image/png')
 
         # Return the image URL as JSON response
-        return jsonify({"imageUrl": "data:image/png;base64," + base64.b64encode(img_buffer.read()).decode()})
+        return jsonify({"imageUrl": "data:image/png;base64," + base64.b64encode(img_buffer.read()).decode(),"id":f"#{visualization_id}","name":"Get Top SellingStock"})
 
     elif visualization_id == 'busiestHour':
 
@@ -462,7 +462,7 @@ def getTopSellingStock(visualization_id):
         plt.close()
 
         # Return the image URL as JSON response
-        return jsonify({"imageUrl": "data:image/png;base64," + base64.b64encode(img_buffer.read()).decode()})
+        return jsonify({"imageUrl": "data:image/png;base64," + base64.b64encode(img_buffer.read()).decode(),"id":f"#{visualization_id}","name":"Busiest Hour"})
 
     else:
         return jsonify({'error': 'Visualization not found'}), 404

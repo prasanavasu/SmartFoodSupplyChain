@@ -12,15 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     chatbotInterface.innerHTML = `
         <div class="chat-message">I am Infinity Virtual Assistant</div>
         <div class="chat-message">Glad you're here!</div>
-        <div class="chat-message">I'm here to assist you.</div>
     `;
 
     // Visualization buttons
     const visualizationButtons = document.createElement('div');
     visualizationButtons.classList.add('visualization-buttons');
     visualizationButtons.innerHTML = `
-        <button class="visualization-button" id="selling_stock" onclick="showVisualization('getTopSellingStock')">Top Selling Stock</button>
-        <button class="visualization-button"id="busiest_hour" onclick="showVisualization('busiestHour')">Busiest Hour</button>
+        <button class="visualization-button" id="getTopSellingStock" onclick="showVisualization('getTopSellingStock')">Top Selling Stock</button>
+        
     `;
     chatbotInterface.appendChild(visualizationButtons);
 
@@ -53,9 +52,17 @@ function showVisualization(buttonId) {
             // Create a div to hold the visualization image
             const visualizationDiv = document.createElement('div');
             visualizationDiv.classList.add('visualization-container');
-            visualizationDiv.innerHTML = `
-                <img src="${data.imageUrl}" alt="Visualization" class="visualization-image">
-            `;
+            $(data.id).hide()
+            html_data = `
+            <a href="${data.imageUrl}" id="${data.id}" target="_blank" title="Visualization">
+            <img src="${data.imageUrl}" alt="Visualization" class="visualization-image"id="${data.id}_img"></a>
+            <p>${data.name}</p>`;
+            if(data.id==='#getTopSellingStock'){
+                visualizationDiv.innerHTML = html_data+ ` <button class="visualization-button"id="busiestHour" onclick="showVisualization('busiestHour')">Busiest Hour</button>`
+
+            }else{
+                visualizationDiv.innerHTML = html_data
+            }
 
             // Append the visualization div to the chatbot interface
             chatbotInterface.appendChild(visualizationDiv);
@@ -70,3 +77,9 @@ function showVisualization(buttonId) {
             console.error('Error fetching visualization data:', error);
         });
 }
+
+$("#getTopSellingStock").on("click", function() {
+    $('#imagepreview').attr('src', $('##getTopSellingStock_img').attr('src')); // here asign the image to the modal when the user click the enlarge link
+    $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+ });
+ 
